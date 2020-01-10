@@ -2,4 +2,6 @@
     <string name="app_name">AudioRecordViewSample</string>
     <string name="start_recording">Start Recording</string>
     <string name="stop_recording">Stop Recording</string>
+    <string name="align_to_center">Align to center</string>
+    <string name="rounded_corners">Rounded corners</string>
 </resources>

@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.Button
+import android.widget.Switch
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import com.visualizer.amplitude.AudioRecordView
@@ -38,6 +39,7 @@ open class MainActivity : AppCompatActivity() {
         startButton = findViewById(R.id.startRecording)
         stopButton = findViewById(R.id.stopRecording)
         audioRecordView = findViewById(R.id.audioRecordView)
+        setSwitchListeners()
     }
 
     fun startRecording(view: View) {
@@ -79,6 +81,18 @@ open class MainActivity : AppCompatActivity() {
         stopDrawing()
     }
 
+    private fun setSwitchListeners() {
+        findViewById<Switch>(R.id.switchAlignTo).setOnCheckedChangeListener { _, isChecked ->
+            audioRecordView.chunkAlignTo = if (isChecked) {
+                AudioRecordView.AlignTo.CENTER
+            } else {
+                AudioRecordView.AlignTo.BOTTOM
+            }
+        }
+        findViewById<Switch>(R.id.switchRoundedCorners).setOnCheckedChangeListener { _, isChecked ->
+            audioRecordView.chunkRoundedCorners = isChecked
+        }
+    }
     private fun startDrawing() {
         timer = Timer()
         timer?.schedule(object : TimerTask() {
@@ -86,7 +100,7 @@ open class MainActivity : AppCompatActivity() {
                 val currentMaxAmplitude = recorder?.maxAmplitude
                 audioRecordView.update(currentMaxAmplitude!!); //redraw view
             }
-        }, 0, 60)
+        }, 0, 100)
     }
 
     private fun stopDrawing() {
