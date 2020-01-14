@@ -92,6 +92,9 @@ open class MainActivity : AppCompatActivity() {
         findViewById<Switch>(R.id.switchRoundedCorners).setOnCheckedChangeListener { _, isChecked ->
             audioRecordView.chunkRoundedCorners = isChecked
         }
+        findViewById<Switch>(R.id.switchSoftTransition).setOnCheckedChangeListener { _, isChecked ->
+            audioRecordView.chunkSoftTransition = isChecked
+        }
     }
     private fun startDrawing() {
         timer = Timer()
