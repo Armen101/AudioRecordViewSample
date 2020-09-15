@@ -7,10 +7,10 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.Button
-import android.widget.Switch
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import com.visualizer.amplitude.AudioRecordView
+import kotlinx.android.synthetic.main.activity_main.*
 import java.io.File
 import java.io.IOException
 import java.util.*
@@ -54,19 +54,21 @@ open class MainActivity : AppCompatActivity() {
         try {
             audioFile = File.createTempFile("audio", "tmp", cacheDir)
         } catch (e: IOException) {
-            Log.e(MainActivity::class.simpleName, e.message!!)
+            Log.e(MainActivity::class.simpleName, e.message ?: e.toString())
             return
         }
         //Creating MediaRecorder and specifying audio source, output format, encoder & output format
         recorder = MediaRecorder()
-        recorder?.setAudioSource(MediaRecorder.AudioSource.MIC)
-        recorder?.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4)
-        recorder?.setAudioEncoder(MediaRecorder.AudioEncoder.AAC)
-        recorder?.setOutputFile(audioFile?.absolutePath)
-        recorder?.setAudioSamplingRate(48000)
-        recorder?.setAudioEncodingBitRate(48000)
-        recorder?.prepare()
-        recorder?.start()
+        recorder?.apply {
+            setAudioSource(MediaRecorder.AudioSource.MIC)
+            setOutputFormat(MediaRecorder.OutputFormat.MPEG_4)
+            setAudioEncoder(MediaRecorder.AudioEncoder.AAC)
+            setOutputFile(audioFile?.absolutePath)
+            setAudioSamplingRate(48000)
+            setAudioEncodingBitRate(48000)
+            prepare()
+            start()
+        }
 
         startDrawing()
     }
@@ -75,33 +77,35 @@ open class MainActivity : AppCompatActivity() {
         startButton.isEnabled = true
         stopButton.isEnabled = false
         //stopping recorder
-        recorder?.stop()
-        recorder?.release()
-
+        recorder?.apply {
+            stop()
+            release()
+        }
         stopDrawing()
     }
 
     private fun setSwitchListeners() {
-        findViewById<Switch>(R.id.switchAlignTo).setOnCheckedChangeListener { _, isChecked ->
+        switchAlignTo.setOnCheckedChangeListener { _, isChecked ->
             audioRecordView.chunkAlignTo = if (isChecked) {
                 AudioRecordView.AlignTo.CENTER
             } else {
                 AudioRecordView.AlignTo.BOTTOM
             }
         }
-        findViewById<Switch>(R.id.switchRoundedCorners).setOnCheckedChangeListener { _, isChecked ->
+        switchRoundedCorners.setOnCheckedChangeListener { _, isChecked ->
             audioRecordView.chunkRoundedCorners = isChecked
         }
-        findViewById<Switch>(R.id.switchSoftTransition).setOnCheckedChangeListener { _, isChecked ->
+        switchSoftTransition.setOnCheckedChangeListener { _, isChecked ->
             audioRecordView.chunkSoftTransition = isChecked
         }
     }
+
     private fun startDrawing() {
         timer = Timer()
         timer?.schedule(object : TimerTask() {
             override fun run() {
                 val currentMaxAmplitude = recorder?.maxAmplitude
-                audioRecordView.update(currentMaxAmplitude!!); //redraw view
+                audioRecordView.update(currentMaxAmplitude ?: 0) //redraw view
             }
         }, 0, 100)
     }
