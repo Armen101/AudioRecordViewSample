@@ -5,8 +5,6 @@ import android.content.pm.PackageManager
 import android.media.MediaRecorder
 import android.os.Bundle
 import android.util.Log
-import android.view.View
-import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import com.visualizer.amplitude.AudioRecordView
@@ -14,7 +12,6 @@ import kotlinx.android.synthetic.main.activity_main.*
 import java.io.File
 import java.io.IOException
 import java.util.*
-
 
 open class MainActivity : AppCompatActivity() {
 
@@ -26,30 +23,28 @@ open class MainActivity : AppCompatActivity() {
 
     private var timer: Timer? = null
     private var recorder: MediaRecorder? = null
-
     private var audioFile: File? = null
-
-    private lateinit var startButton: Button
-    private lateinit var stopButton: Button
-    private lateinit var audioRecordView: AudioRecordView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        startButton = findViewById(R.id.startRecording)
-        stopButton = findViewById(R.id.stopRecording)
-        audioRecordView = findViewById(R.id.audioRecordView)
+        startRecording.setOnClickListener {
+            startRecording()
+        }
+        stopRecording.setOnClickListener {
+            stopRecording()
+        }
         setSwitchListeners()
     }
 
-    fun startRecording(view: View) {
+    private fun startRecording() {
         if (!permissionsIsGranted(requiredPermissions)) {
             ActivityCompat.requestPermissions(this, requiredPermissions, 200)
             return
         }
 
-        startButton.isEnabled = false
-        stopButton.isEnabled = true
+        startRecording.isEnabled = false
+        stopRecording.isEnabled = true
         //Creating file
         try {
             audioFile = File.createTempFile("audio", "tmp", cacheDir)
@@ -73,9 +68,9 @@ open class MainActivity : AppCompatActivity() {
         startDrawing()
     }
 
-    fun stopRecording(view: View) {
-        startButton.isEnabled = true
-        stopButton.isEnabled = false
+    private fun stopRecording() {
+        startRecording.isEnabled = true
+        stopRecording.isEnabled = false
         //stopping recorder
         recorder?.apply {
             stop()
@@ -136,6 +131,6 @@ open class MainActivity : AppCompatActivity() {
                 return
             }
         }
-        startRecording(View(this))
+        startRecording()
     }
 }
