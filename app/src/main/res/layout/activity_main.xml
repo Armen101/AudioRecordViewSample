@@ -39,6 +39,7 @@
         app:chunkSoftTransition="false"
         app:chunkSpace="1dp"
         app:chunkWidth="4dp"
+        app:direction="leftToRight"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
@@ -74,5 +75,15 @@
         android:text="@string/align_to_center"
         app:layout_constraintEnd_toEndOf="@+id/switchRoundedCorners"
         app:layout_constraintTop_toBottomOf="@+id/switchRoundedCorners" />
+
+    <androidx.appcompat.widget.SwitchCompat
+        android:id="@+id/switchDirection"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="26dp"
+        android:switchPadding="10dp"
+        android:text="@string/draw_right_to_left"
+        app:layout_constraintEnd_toEndOf="@+id/switchRoundedCorners"
+        app:layout_constraintTop_toBottomOf="@+id/switchAlignTo" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
